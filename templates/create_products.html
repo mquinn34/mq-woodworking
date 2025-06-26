@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2>Create New Product</h2>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <hr>
+    <h4>Build Variants</h4>
+    {{ formset.management_form }}
+    <input type="hidden" name="form-TOTAL_FORMS" id="id_form-TOTAL_FORMS" value="{{ formset.total_form_count }}">
+    <input type="hidden" name="form-INITIAL_FORMS" id="id_form-INITIAL_FORMS" value="{{ formset.initial_form_count }}">
+    <input type="hidden" name="form-MIN_NUM_FORMS" id="id_form-MIN_NUM_FORMS" value="{{ formset.min_num }}">
+    <input type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS" value="{{ formset.max_num }}">
+
+    <!-- Column Headers -->
+    <div class="variant-form border p-2 mb-2 bg-light fw-semibold">
+      <div class="row">
+        <div class="col">Wood Type</div>
+        <div class="col">Size</div>
+        <div class="col">Price</div>
+        <div class="col">Delete</div>
+      </div>
+    </div>
+
+    <!-- Existing Formset Forms -->
+    <div id="variant-formset">
+      {% for form in formset %}
+        <div class="variant-form border p-3 mb-2">
+          <div class="row">
+            <div class="col">{{ form.wood_type }}</div>
+            <div class="col">{{ form.size }}</div>
+            <div class="col">{{ form.price_modifier }}</div>
+            <div class="col">{{ form.DELETE }}</div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <!-- Hidden Empty Form Template -->
+    <div id="empty-form-template" style="display: none;">
+      <div class="variant-form border p-3 mb-2">
+        <div class="row">
+          <div class="col">{{ empty_form.wood_type }}</div>
+          <div class="col">{{ empty_form.size }}</div>
+          <div class="col">{{ empty_form.price_modifier }}</div>
+          <div class="col">{{ empty_form.DELETE }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Variant Button -->
+    <button type="button" class="btn btn-outline-primary" onclick="addForm()">+ Add Variant</button>
+
+    <br><br>
+    <button type="submit" class="btn btn-success">Save Product</button>
+    <a href="{% url 'manage_products' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+  const formset = document.getElementById('variant-formset');
+  const emptyTemplate = document.getElementById("empty-form-template").innerHTML;
+
+  window.addForm = function () {
+    const formCount = parseInt(totalForms.value);
+    const newFormHtml = emptyTemplate.replace(/__prefix__/g, formCount);
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = newFormHtml;
+
+    formset.appendChild(tempDiv.firstElementChild);
+    totalForms.value = formCount + 1;
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Top Section: Image + Text (2 Columns) -->
+<div class="container py-5">
+  <div class="row align-items-center">
+    <div class="col-md-6 mb-4 mb-md-0">
+      <img src="{% static 'images/about-photo.jpg' %}" class="img-fluid rounded shadow" alt="Mike in his workshop">
+    </div>
+    <div class="col-md-6">
+      <h2 class="mb-3">Crafting Chicago’s Finest Record Cabinets</h2>
+      <p>I’m Mike Quinn, a Chicago-based furniture builder specializing in custom record cabinets, dining tables, and mid-century modern design. Every piece is crafted by hand with attention to detail and a deep love for the process.</p>
+      <p>MQ Woodworking started in my garage and has grown into a full-service studio focused on timeless pieces built to last. Whether you’re a vinyl collector or looking for a custom heirloom, I’d love to build something just for you.</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- 2nd Section: Image + Text (2 Columns) -->
+<div class="bg-light py-5">
+  <div class="container py-5">
+    <div class="row align-items-center">
+      <div class="col-md-6 mb-4 mb-md-0">
+        <img src="{% static 'images/about-photo2.jpg' %}" class="img-fluid rounded shadow" alt="Mike in his workshop">
+      </div>
+      <div class="col-md-6">
+        <h2 class="mb-3">From Vinyl Lover to Woodworker</h2>
+        <p>I grew up flipping through crates at record stores and dreaming of a piece of furniture worthy of my collection. After studying design and learning traditional woodworking, I opened my Lakeview garage workshop. Today, MQ Woodworking joins my passion for vinyl with the craftsmanship I’ve honed—naming each piece after a Chicago street and handcrafting it from start to finish.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 3rd Section: 3 Columns with Text -->
+
+  <div class="container">
+    <div class="row mb-4">
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <h4>Custom Built</h4>
+        <p>Every piece is made to order using premium hardwoods, designed to match your style and space.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h4>Chicago Roots</h4>
+        <p>All designs are inspired by local architecture and named after Chicago streets and neighborhoods.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h4>Vinyl-Ready</h4>
+        <p>Our record cabinets are built for collectors—sized perfectly for LPs, receivers, and turntables.</p>
+      </div>
+    </div>
+  </div>
+
+
+
+<!-- 3rd Section: 3 Columns with Text -->
+<div class="bg-light py-4">
+  <div class="container">
+     <div class="row pb-4">
+      <div class="col text-center">
+        <h2 class>Materials & Craftsmanship</h2>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <h4>Premium Hardwoods</h4>
+        <p>We hand select only the best walnut, cherry, maple, and white oak.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h4>Handcrafted Quality</h4>
+        <p>From hand‑cut joinery to hand‑rubbed oil finishes, every detail is deliberate.</p>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h4>Build & Finish</h4>
+        <p>Mid‑century lines meet modern function—heirloom pieces built to last.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container my-5">
+  <h2 class="text-center mb-4">Our Process</h2>
+    <div class="row text-center">
+      <div class="col-md-3 mb-4">
+        <h5>Consultation</h5>
+        <p>You tell us your collection size, style, and street‑name preference.</p>
+      </div>
+      <div class="col-md-3 mb-4">
+        <h5>Design & Quote</h5>
+        <p>We send you a mock‑up and transparent pricing.</p>
+      </div>
+      <div class="col-md-3 mb-4">
+        <h5>Build & Finish</h5>
+        <p>Crafted in our Lakeview workshop over 8-10 weeks.</p>
+      </div>
+      <div class="col-md-3 mb-4">
+        <h5>Finish & Setup</h5>
+        <p>White‑glove hand delivery in Chicago, plus styling tips.</p>
+      </div>
+    </div>
+  </div>
+
+<div class="bg-light py-3">
+  <div class="container my-5">
+    <h2 class="text-center mb-4">Our Promise to Collectors</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <p class="lead text-center">
+          We believe your music deserves respect, just like your furniture.  
+          Every MQ piece is a promise of durability, sustainability, and design integrity.  
+          We build small-batch, locally, ensuring your cabinet is as unique as your vinyl collection.
+        </p>
+        <div class="d-flex justify-content-center mt-3">
+          <a href="{% url 'shop' %}" class="btn btn-primary"><B>BROWSE THE COLLECTION</B></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="container my-5">
+    <h2 class="text-center mb-4">Ready to Give Your Records a Home?</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <p class="lead text-center">
+          Let’s design your custom cabinet—named after the street that moves you.
+        </p>
+        <div class="d-flex justify-content-center mt-3">
+          <a href="{% url 'contact' %}" class="btn btn-primary"><B>START YOUR CUSTOM ORDER </B></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+{% endblock %}

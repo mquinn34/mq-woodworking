@@ -1,0 +1,13 @@
+<!-- templates/products/delete_product.html -->
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2>Delete "{{ object.name }}"?</h2>
+  <p>This action cannot be undone.</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a href="{% url 'manage_products' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}

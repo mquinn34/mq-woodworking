@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block content %}
+<!-- templates/products/product_list.html -->
+<h2 class="mb-4">All Products</h2>
+<div class="row">
+  {% for product in products %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <a href="{{ product.get_absolute_url }}">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+          {% else %}
+            <img src="{% static 'images/placeholder.jpg' %}" alt="No image available" class="img-fluid">
+          {% endif %}
+
+        </a>
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="{{ product.get_absolute_url }}" class="text-decoration-none text-dark">
+              {{ product.name }}
+            </a>
+          </h5>
+          <p class="text-muted">{{ product.product_type|capfirst }}</p>
+          {% with product.variants.all|dictsort:"price_modifier"|first as cheapest %}
+          <p class="fw-bold">Starting at ${{ cheapest.price_modifier }}</p>
+{% endwith %}
+
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>No products available right now.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}
+
