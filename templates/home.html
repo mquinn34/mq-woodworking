@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<section class="py-5">
+  <div class="container text-center">
+    <h1 class="mb-3">Handcrafted Record Cabinets Designed to Showcase Your Vinyl Collection</h1>
+    <h4 class="text-muted mb-4">Each cabinet is handcrafted in our Chicago workshop, blending timeless design with durable functionality—built to showcase and protect your cherished vinyl records.</h4>
+
+    <img src="{% static 'images/clybourn.png' %}" alt="Record cabinet"
+         class="img-fluid rounded shadow mx-auto d-block" style="max-width: 75%;">
+  </div>
+</section>
+
+
+<section class=" bg-light py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      
+      <div class="col-md-6">
+        <h2 class="mb-3">Rooted in Chicago.<br>Designed for Vinyl.</h2>
+        <p class="lead">
+          At MQ Woodworking, every piece begins with a story. Inspired by Chicago’s neighborhoods and built for serious vinyl collectors, our record cabinets are designed with purpose, proportion, and soul.
+          Named after the streets we walk and crafted from timeless hardwoods, these are pieces made to live with for decades.
+        </p>
+        <div class="d-flex justify-content-left mt-3">
+          <a href="{% url 'shop' %}" class="btn btn-primary"><B>BROWSE THE COLLECTION</B></a>
+        </div> 
+      </div>
+      <div class="col-md-6 text-center">
+        <img src="{% static 'images/racine.jpg' %}" alt="Chicago Inspired Record Cabinet"
+             class="img-fluid rounded shadow">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+        <h2 class="mb-4">Built by Hand. One at a Time.</h2>
+        <p class="lead">
+          Each cabinet is custom built in our Lakeview garage workshop—small-batch, start to finish. We don’t cut corners. We shape them, sand them, and obsess over the grain.
+          From material selection to the final hand-rubbed finish, this is Chicago craftsmanship at its best.
+        </p>
+    </div>
+  </div>
+</section>
+
+
+
+<h2 class="mb-4">Featured Products</h2>
+<div class="row">
+  {% for product in featured_products %}
+    <div class="col-md-4">
+      <div class="card h-100">
+        <a href="{{ product.get_absolute_url }}">
+        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+        </a>
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="text-muted">{{ product.product_type|capfirst }}</p>
+          {% with product.variants.all|dictsort:"price"|first as cheapest %}
+            <p class="fw-bold">Starting at ${{ cheapest.price }}</p>
+          {% endwith %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+
+<section class=" bg-light py-5">
+  <div class="container">
+    <div class="row align-items-center">
+      
+      <div class="col-md-6">
+        <h2 class="mb-3">Made for Your Music.<br>Built for Your Home.</h2>
+        <p class="lead">
+          “We are so happy to have such a beautiful piece of furniture”<br>
+            Allison | Chicago <br><br>
+            “Mike was able to adjust the size a bit to fit our space, and it looks great!”
+        </p>
+      </div>
+      <div class="col-md-6 text-center">
+        <img src="{% static 'images/racine.jpg' %}" alt="Chicago Inspired Record Cabinet"
+             class="img-fluid rounded shadow">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+        <h2 class="mb-4">Lets Build Your Cabinet</h2>
+        <p class="lead">
+         Ready to elevate your listening setup? We’re currently booking builds for June.
+        </p>
+        <div class="d-flex justify-content-center mt-3">
+          <a href="{% url 'contact' %}" class="btn btn-primary"><B>START YOU'RE CUSTOM ORDER</B></a>
+        </div> 
+    </div>
+  </div>
+</section>
+
+
+
+<!-- Section: Beyond Cabinets -->
+<section class="py-5 bg-light">
+  <div class="container text-center">
+    <!-- Text block -->
+    <div class="row mb-4">
+      <div class="col">
+        <h2 class="mb-3">Beyond Cabinets</h2>
+        <p class="lead">We also design coffee tables, sideboards, and dining tables—made to match or stand alone.</p>
+      </div>
+    </div>
+
+    <!-- Image columns -->
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <img src="{% static 'images/montrose.jpg' %}" alt="Dining Table" class="img-fluid rounded shadow-sm">
+      </div>
+      <div class="col-md-4 mb-4">
+        <img src="{% static 'images/addison.jpg' %}" alt="Coffee Table" class="img-fluid rounded shadow-sm">
+      </div>
+      <div class="col-md-4 mb-4">
+        <img src="{% static 'images/sunnyside.jpg' %}" alt="Side Table" class="img-fluid rounded shadow-sm">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% endblock %}
+
