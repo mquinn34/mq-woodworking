@@ -19,6 +19,7 @@ class ProductDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['product_images'] = self.object.images.all()
         variants = list(self.object.variants.values("wood_type", "size", "price_modifier"))
         context["variants"] = variants
         context["wood_options"] = sorted(set(v["wood_type"] for v in variants))
