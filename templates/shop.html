@@ -11,8 +11,8 @@
     <div class="col-md-4 mb-4">
       <div class="card h-100">
         <a href="{{ product.get_absolute_url }}">
-          {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
+          {% if product.main_image %}-
+            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="img-fluid">
           {% else %}
             <img src="{% static 'images/placeholder.jpg' %}" alt="No image available" class="img-fluid">
           {% endif %}
