@@ -1,5 +1,5 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from .models import Product
+from .models import Product, ProductImage
 from django.urls import reverse_lazy
 from .forms import ProductForm, ProductVariantFormSet
 from django.shortcuts import redirect
@@ -53,10 +53,14 @@ class CreateProductView(CreateView):
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
+        images = self.request.FILES.getlist('image')
         if formset.is_valid():
             self.object = form.save()
             formset.instance = self.object
             formset.save()
+
+            for img in images:
+                ProductImage.objects.create(product=self.object, image=img)
             return super().form_valid(form) 
         else:
             return self.render_to_response(self.get_context_data(form=form))
@@ -78,16 +82,25 @@ class EditProductView(UpdateView):
 
         context['formset'] = formset
         context['empty_form'] = formset.empty_form
+        context['existing_images'] = self.object.images.all() 
+
         return context
 
     def form_valid(self, form):
     # bind the formset to POST + current instance
         formset = ProductVariantFormSet(self.request.POST, instance=self.object)
-
+        images = self.request.FILES.getlist('image')
         if form.is_valid() and formset.is_valid():
             self.object = form.save()
             formset.instance = self.object
             formset.save()
+
+            delete_ids = self.request.POST.getlist('delete_image_ids')
+            if delete_ids:
+                ProductImage.objects.filter(id__in=delete_ids, product=self.object).delete()
+
+            for img in images:
+                ProductImage.objects.create(product=self.object, image=img)
             return redirect('manage_products')
 
     # if anything is invalid, fall through and show the form again

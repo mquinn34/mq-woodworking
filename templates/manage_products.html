@@ -21,8 +21,8 @@
     <tbody>
       {% for product in products %}
         <tr>
-          <td> {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-height: 100px;">
+          <td> {% if product.main_image %}
+            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="max-height: 100px;">
             {% else %}
             <span class="text-muted">No image</span>
             {% endif %}
