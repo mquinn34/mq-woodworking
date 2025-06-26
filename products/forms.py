@@ -1,6 +1,6 @@
 from django import forms
 from ckeditor.widgets import CKEditorWidget
-from products.models import Product, ProductVariant
+from products.models import Product, ProductVariant, ProductImage
 from django.forms import inlineformset_factory
 
 class ProductForm(forms.ModelForm):
@@ -8,7 +8,7 @@ class ProductForm(forms.ModelForm):
    
     class Meta:
         model = Product
-        fields = ['name', 'description', 'slug', 'product_type', 'is_featured', 'image']
+        fields = ['name', 'description', 'slug', 'product_type', 'is_featured', 'main_image']
         widgets = {'description': forms.Textarea(attrs={'rows': 5}),}
 
 

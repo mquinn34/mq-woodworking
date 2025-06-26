@@ -11,6 +11,31 @@
     {% csrf_token %}
     {{ form.as_p }}
 
+<div class="mb-3">
+  <label for="imageUpload" class="form-label">Upload Images</label>
+  <input type="file" name="image" id="imageUpload" multiple class="form-control">
+  <small class="form-text text-muted">You can select multiple images.</small>
+</div>
+{% if existing_images %}
+  <div class="mb-3">
+    <h5>Existing Images</h5>
+    <div class="row">
+      {% for img in existing_images %}
+        <div class="col-md-3 mb-3 text-center">
+          <img src="{{ img.image.url }}" class="img-fluid rounded border mb-2" alt="Product Image">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="delete_image_ids" value="{{ img.id }}" id="deleteImage{{ img.id }}">
+            <label class="form-check-label text-danger" for="deleteImage{{ img.id }}">
+              Delete
+            </label>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+
     <hr>
     <h4>Build Variants</h4>
     {{ formset.management_form }}

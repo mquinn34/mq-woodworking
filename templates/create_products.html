@@ -11,6 +11,13 @@
     {% csrf_token %}
     {{ form.as_p }}
 
+<div class="mb-3">
+  <label for="imageUpload" class="form-label">Upload Images</label>
+  <input type="file" name="image" id="imageUpload" multiple class="form-control">
+  <small class="form-text text-muted">You can select multiple images.</small>
+</div>
+
+
     <hr>
     <h4>Build Variants</h4>
     {{ formset.management_form }}
@@ -59,6 +66,7 @@
     <button type="button" class="btn btn-outline-primary" onclick="addForm()">+ Add Variant</button>
 
     <br><br>
+    
     <button type="submit" class="btn btn-success">Save Product</button>
     <a href="{% url 'manage_products' %}" class="btn btn-secondary">Cancel</a>
   </form>

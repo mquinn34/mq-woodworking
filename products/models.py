@@ -13,7 +13,7 @@ class Product(models.Model):
         ('coffee_table', 'Coffee Table')
     ])
     is_featured = models.BooleanField(default=False)
-    image = models.ImageField(upload_to='product_images/', blank = True)
+    main_image = models.ImageField(upload_to='main_images/', blank = True)
 
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'slug': self.slug})
