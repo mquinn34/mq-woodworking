@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 
-
 {% block content %}
-<h1>gallery</h1>
-
+<div class="container mt-5">
+  <h2 class="mb-4">Gallery</h2>
+  <div class="row">
+    {% for image in images %}
+      <div class="col-md-4 mb-4">
+        <img src="{{ image.image.url }}" alt="Gallery image" class="img-fluid rounded shadow-sm">
+      </div>
+    {% empty %}
+      <p>No images uploaded yet.</p>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

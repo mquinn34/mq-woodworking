@@ -1,11 +1,13 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, ListView
+from django.views import View
+from django.shortcuts import render, redirect
+from django.views.generic import TemplateView, ListView, DeleteView
 from django.views.generic.edit import FormView
 from products.models import Product
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import ContactForm
+from .models import GalleryImage
 
 
 class HomePageView(ListView):
@@ -55,8 +57,42 @@ class ContactPageView(FormView):
         return super().form_valid(form)
 
 
-class GalleryPageView(TemplateView):
+class GalleryImageUploadView(View):
+    template_name = 'gallery_upload.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        images = request.FILES.getlist('image')  # Match input name="image"
+        for img in images:
+            GalleryImage.objects.create(image=img)
+        return redirect('gallery-manage')
+
+
+
+class GalleryManageView(ListView):
+    model = GalleryImage
+    template_name = 'gallery_manage.html'
+    context_object_name = 'images'
+    ordering = ['-uploaded_at']
+
+class GalleryImageDeleteView(DeleteView):
+    model = GalleryImage
+    template_name = 'gallery_confirm_delete.html'
+    success_url = reverse_lazy('gallery-manage')
+
+
+
+
+
+
+class GalleryPageView(ListView):
+    model = GalleryImage
     template_name = "gallery.html"
+    context_object_name = "images"
+    ordering = ["-uploaded_at"]
+
 
 
 

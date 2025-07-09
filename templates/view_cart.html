@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Your Cart</h2>
+
+  {% if cart_items %}
+    <table class="table table-bordered align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Img</th>  
+          <th>Product</th>
+          <th>Wood Type</th>
+          <th>Size</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in cart_items %}
+          {% include "cart_row.html" %}
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {% include "cart_total.html" %}
+
+    <div class="d-flex justify-content-between mt-3">
+      <a href="{% url 'shop' %}" class="btn btn-outline-secondary">← Continue Shopping</a>
+      <a href="{% url 'shop' %}" class="btn btn-success">Proceed to Checkout</a>
+    </div>
+  {% else %}
+    <p>Your cart is empty.</p>
+    <a href="{% url 'shop' %}" class="btn btn-primary mt-3">Continue Shopping</a>
+  {% endif %}
+
+  <form style="display:none;">{% csrf_token %}</form>
+</div>
+
+<script>
+  document.body.addEventListener("cartTotalUpdated", function(event) {
+    if (event.detail && event.detail.total) {
+      document.getElementById("cart-total").textContent = "$" + parseFloat(event.detail.total).toFixed(2);
+    }
+  });
+</script>
+{% endblock %}

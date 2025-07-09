@@ -55,6 +55,16 @@
       </div>
 
       <div id="priceDisplay" class="mt-3 fw-bold h5 text-success">Please select options to see price</div>
+      
+      <form action="{% url 'add_to_cart' %}" method="post" id="addToCartForm">
+        {% csrf_token %}
+        <input type="hidden" name="variant_id" id="variantIdInput">   <!--  ID must match JS -->
+        <input type="hidden" name="quantity"   value="1">
+        <button type="submit" class="btn btn-primary mt-3">Add to Cart</button>
+      </form>
+
+
+
     </div>
   </div>
 </div>
@@ -72,6 +82,7 @@
     const woodSelect = document.getElementById("woodSelect");
     const sizeSelect = document.getElementById("sizeSelect");
     const priceDisplay = document.getElementById("priceDisplay");
+    const variantIdInput = document.getElementById("variantIdInput");
 
     thumbnails.forEach(img => {
       img.addEventListener("click", () => {
@@ -89,8 +100,10 @@
 
       if (match) {
         priceDisplay.textContent = `Price: $${parseFloat(match.price_modifier).toFixed(2)}`;
+        variantIdInput.value = match.id;
       } else {
         priceDisplay.textContent = "Please select options to see price";
+        variantIdInput.value = "";
       }
     }
 

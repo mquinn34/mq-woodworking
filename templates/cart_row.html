@@ -1,0 +1,38 @@
+{% load static %}
+
+<tr id="cart-item-{{ item.id }}">
+  <td>
+    {% if item.product.main_image %}
+      <img src="{{ item.product.main_image.url }}" style="max-height: 100px;">
+    {% else %}
+      <img src="{% static 'images/placeholder.jpg' %}" style="max-height: 100px;">
+    {% endif %}
+  </td>
+  <td>{{ item.product.name }}</td>
+  <td>{{ item.variant.wood_type }}</td>
+  <td>{{ item.variant.size }}</td>
+  <td>
+    <input type="number"
+           name="quantity"
+           value="{{ item.quantity }}"
+           min="1"
+           class="form-control"
+           hx-post="{% url 'htmx_update_quantity' item.id %}"
+           hx-trigger="change"
+           hx-target="#cart-item-{{ item.id }}"
+           hx-swap="outerHTML"
+    />
+  </td>
+  <td>${{ item.variant.price_modifier|floatformat:2 }}</td>
+  <td>${{ item.get_total_price|floatformat:2 }}</td>
+  <td>
+    <button 
+      class="btn btn-sm btn-danger"
+      hx-delete="{% url 'htmx_remove_from_cart' item.id %}"
+      hx-target="#cart-item-{{ item.id }}"
+      hx-swap="outerHTML"
+    >
+      Remove
+    </button>
+  </td>
+</tr>
