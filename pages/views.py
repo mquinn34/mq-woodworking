@@ -83,15 +83,17 @@ class GalleryImageDeleteView(DeleteView):
     success_url = reverse_lazy('gallery-manage')
 
 
-
-
-
-
 class GalleryPageView(ListView):
     model = GalleryImage
     template_name = "gallery.html"
     context_object_name = "images"
     ordering = ["-uploaded_at"]
+
+def checkout_success(request):
+    return render(request, "checkout_success.html")
+
+def checkout_cancel(request):
+    return render(request, "checkout_cancel.html")
 
 
 

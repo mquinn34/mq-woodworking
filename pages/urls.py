@@ -1,12 +1,15 @@
 from django.urls import path
-from .views import HomePageView, AboutPageView, TemplateView, ContactPageView, GalleryPageView,GalleryImageUploadView, GalleryManageView, GalleryImageDeleteView
-
+from .views import HomePageView, AboutPageView, TemplateView, ContactPageView, GalleryPageView,GalleryImageUploadView, GalleryManageView, GalleryImageDeleteView, checkout_cancel, checkout_success
+from . import views
 urlpatterns = [
     path("", HomePageView.as_view(), name = "home"),
     path("about/", AboutPageView.as_view(), name="about"),
     path("contact/", ContactPageView.as_view(), name = "contact"),
     path('thank-you/', TemplateView.as_view(template_name='thank_you.html'), name='contact_thank_you'),
     path("gallery/", GalleryPageView.as_view(), name ="gallery"),
+    path('success/', views.checkout_success, name='checkout_success'),
+    path('cancel/', views.checkout_cancel, name='checkout_cancel'),
+
 
 
     path("dashboard/gallery-manage/", GalleryManageView.as_view(), name = 'gallery-manage'),

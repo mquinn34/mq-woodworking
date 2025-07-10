@@ -28,19 +28,47 @@
 
     {% include "cart_total.html" %}
 
-    <div class="d-flex justify-content-between mt-3">
+    <div class="d-flex justify-content-between mt-4">
       <a href="{% url 'shop' %}" class="btn btn-outline-secondary">← Continue Shopping</a>
-      <a href="{% url 'shop' %}" class="btn btn-success">Proceed to Checkout</a>
+
+      <!-- Stripe Checkout button -->
+      <button id="checkout-button" class="btn btn-success">
+        Proceed to Checkout
+      </button>
     </div>
   {% else %}
     <p>Your cart is empty.</p>
     <a href="{% url 'shop' %}" class="btn btn-primary mt-3">Continue Shopping</a>
   {% endif %}
 
+  <!-- CSRF token for fetch -->
   <form style="display:none;">{% csrf_token %}</form>
 </div>
 
+<!-- Stripe JS -->
+<script src="https://js.stripe.com/v3/"></script>
+
 <script>
+  const stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
+
+  document.getElementById("checkout-button")?.addEventListener("click", function () {
+    fetch("{% url 'create_checkout_session' %}", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.id) {
+        stripe.redirectToCheckout({ sessionId: data.id });
+      } else {
+        alert("Something went wrong creating the checkout session.");
+      }
+    });
+  });
+
+  // Updates total on quantity change
   document.body.addEventListener("cartTotalUpdated", function(event) {
     if (event.detail && event.detail.total) {
       document.getElementById("cart-total").textContent = "$" + parseFloat(event.detail.total).toFixed(2);
