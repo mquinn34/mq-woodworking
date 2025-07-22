@@ -3,6 +3,7 @@ from .models import Product, ProductImage
 from django.urls import reverse_lazy
 from .forms import ProductForm, ProductVariantFormSet
 from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class ProductListView(ListView):
     model = Product
@@ -27,14 +28,14 @@ class ProductDetailView(DetailView):
         return context
 
 
-class ManageProductView(ListView):
+class ManageProductView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'manage_products.html'
     context_object_name = 'products'
     queryset = Product.objects.all().order_by('name')
 
 
-class CreateProductView(CreateView):
+class CreateProductView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'create_products.html'
@@ -55,10 +56,15 @@ class CreateProductView(CreateView):
         context = self.get_context_data()
         formset = context['formset']
         images = self.request.FILES.getlist('image')
+        
         if formset.is_valid():
             self.object = form.save()
-            formset.instance = self.object
-            formset.save()
+
+            for form in formset:
+                if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
+                    variant = form.save(commit=False)
+                    variant.product = self.object
+                    variant.save()
 
             for img in images:
                 ProductImage.objects.create(product=self.object, image=img)
@@ -68,7 +74,7 @@ class CreateProductView(CreateView):
 
 
 
-class EditProductView(UpdateView):
+class EditProductView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'edit_products.html'
@@ -88,13 +94,12 @@ class EditProductView(UpdateView):
         return context
 
     def form_valid(self, form):
-    # bind the formset to POST + current instance
+  
         formset = ProductVariantFormSet(self.request.POST, instance=self.object)
         images = self.request.FILES.getlist('image')
         if form.is_valid() and formset.is_valid():
             self.object = form.save()
-            formset.instance = self.object
-            formset.save()
+            
 
             delete_ids = self.request.POST.getlist('delete_image_ids')
             if delete_ids:
@@ -102,7 +107,19 @@ class EditProductView(UpdateView):
 
             for img in images:
                 ProductImage.objects.create(product=self.object, image=img)
+
+
+            for form in formset:
+                if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
+                    variant = form.save(commit=False)
+                    variant.product = self.object
+                    variant.save()
+
+            
             return redirect('manage_products')
+
+
+            
 
     # if anything is invalid, fall through and show the form again
         return self.render_to_response(
@@ -110,14 +127,14 @@ class EditProductView(UpdateView):
     )
 
 
-class DeleteProductView(DeleteView):
+class DeleteProductView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'delete_products.html'
     success_url = reverse_lazy('manage_products')
 
 
 
-class DashboardView(TemplateView):
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'mq_dashboard.html'
 
 

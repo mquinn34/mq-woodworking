@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Orders</h2>
+    <a href="{% url 'dashboard' %}" class="btn btn-primary m-2">← Back to Dashboard</a>
+  </div>
+
+  {% if orders %}
+    <div class="table-responsive">
+      <table class="table table-hover table-bordered align-middle">
+        <thead class="table-light text-center">
+          <tr>
+            <th>Order Number</th>
+            <th>Customer</th>
+            <th>Email</th>
+            <th>Shipping Address</th>
+            <th>Product</th>
+            <th>Wood / Size</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+            <tr>
+              <td>{{ order.order_number }}</td>  
+              <td>{{ order.customer_name }}</td>
+              <td>{{ order.customer_email }}</td>
+              <td style="white-space: pre-line;">{{ order.shipping_address }}</td>
+              <td>{{ order.product_name }}</td>
+              <td>{{ order.wood_type }} / {{ order.size }}</td>
+              <td class="text-center">{{ order.quantity }}</td>
+              <td>${{ order.total_price }}</td>
+              <td>
+                <form method="post" action="{% url 'toggle_order_status' order.id %}">
+                  {% csrf_token %}
+                  <div class="d-flex align-items-center gap-2">
+                    {% if order.status == "Completed" %}
+                      <span class="badge bg-success">Completed</span>
+                    {% elif order.status == "In Progress" %}
+                      <span class="badge bg-primary">In Progress</span>
+                    {% else %}
+                      <span class="badge bg-secondary">Pending</span>
+                    {% endif %}
+                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                      <option value="In Progress" {% if order.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                      <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+                    </select>
+                  </div>
+                </form>
+              </td>
+              <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">No orders yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

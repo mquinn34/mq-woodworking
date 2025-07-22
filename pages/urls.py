@@ -1,6 +1,8 @@
 from django.urls import path
 from .views import HomePageView, AboutPageView, TemplateView, ContactPageView, GalleryPageView,GalleryImageUploadView, GalleryManageView, GalleryImageDeleteView, checkout_cancel, checkout_success
 from . import views
+from django.contrib.auth import views as auth_views
+
 urlpatterns = [
     path("", HomePageView.as_view(), name = "home"),
     path("about/", AboutPageView.as_view(), name="about"),
@@ -9,6 +11,8 @@ urlpatterns = [
     path("gallery/", GalleryPageView.as_view(), name ="gallery"),
     path('success/', views.checkout_success, name='checkout_success'),
     path('cancel/', views.checkout_cancel, name='checkout_cancel'),
+    path("login/", auth_views.LoginView.as_view(template_name="login.html"), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
 
 
 

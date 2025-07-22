@@ -21,8 +21,7 @@
     <hr>
     <h4>Build Variants</h4>
     {{ formset.management_form }}
-    <input type="hidden" name="form-TOTAL_FORMS" id="id_form-TOTAL_FORMS" value="{{ formset.total_form_count }}">
-    <input type="hidden" name="form-INITIAL_FORMS" id="id_form-INITIAL_FORMS" value="{{ formset.initial_form_count }}">
+
     <input type="hidden" name="form-MIN_NUM_FORMS" id="id_form-MIN_NUM_FORMS" value="{{ formset.min_num }}">
     <input type="hidden" name="form-MAX_NUM_FORMS" id="id_form-MAX_NUM_FORMS" value="{{ formset.max_num }}">
 
@@ -51,16 +50,25 @@
     </div>
 
     <!-- Hidden Empty Form Template -->
-    <div id="empty-form-template" style="display: none;">
-      <div class="variant-form border p-3 mb-2">
-        <div class="row">
-          <div class="col">{{ empty_form.wood_type }}</div>
-          <div class="col">{{ empty_form.size }}</div>
-          <div class="col">{{ empty_form.price_modifier }}</div>
-          <div class="col">{{ empty_form.DELETE }}</div>
-        </div>
+<div id="empty-form-template" style="display: none;">
+  <div class="variant-form border p-3 mb-2">
+    <div class="row">
+      <div class="col">
+        <input type="text" name="form-__prefix__-wood_type" class="form-control" id="id_form-__prefix__-wood_type">
+      </div>
+      <div class="col">
+        <input type="text" name="form-__prefix__-size" class="form-control" id="id_form-__prefix__-size">
+      </div>
+      <div class="col">
+        <input type="number" step="0.01" name="form-__prefix__-price_modifier" class="form-control" id="id_form-__prefix__-price_modifier">
+      </div>
+      <div class="col">
+        <input type="checkbox" name="form-__prefix__-DELETE" id="id_form-__prefix__-DELETE">
       </div>
     </div>
+  </div>
+</div>
+
 
     <!-- Add Variant Button -->
     <button type="button" class="btn btn-outline-primary" onclick="addForm()">+ Add Variant</button>

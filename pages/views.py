@@ -8,14 +8,19 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .forms import ContactForm
 from .models import GalleryImage
+from django.db.models import Min
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class HomePageView(ListView):
     model = Product
     template_name = "home.html"
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['featured_products'] = Product.objects.filter(is_featured=True)[:3]
+        featured = Product.objects.filter(is_featured=True).annotate(
+            min_price= Min('variants__price_modifier'))[:3]
+        context['featured_products'] = featured
         return context
 
 class AboutPageView(TemplateView):
@@ -57,7 +62,7 @@ class ContactPageView(FormView):
         return super().form_valid(form)
 
 
-class GalleryImageUploadView(View):
+class GalleryImageUploadView(LoginRequiredMixin, View):
     template_name = 'gallery_upload.html'
 
     def get(self, request):
@@ -71,13 +76,13 @@ class GalleryImageUploadView(View):
 
 
 
-class GalleryManageView(ListView):
+class GalleryManageView(LoginRequiredMixin, ListView):
     model = GalleryImage
     template_name = 'gallery_manage.html'
     context_object_name = 'images'
     ordering = ['-uploaded_at']
 
-class GalleryImageDeleteView(DeleteView):
+class GalleryImageDeleteView(LoginRequiredMixin, DeleteView):
     model = GalleryImage
     template_name = 'gallery_confirm_delete.html'
     success_url = reverse_lazy('gallery-manage')

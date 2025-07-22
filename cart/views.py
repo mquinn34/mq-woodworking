@@ -6,6 +6,7 @@ from django.template.loader  import render_to_string
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 import stripe
+import json
 from django.http import JsonResponse
 from django.conf import settings
 
@@ -128,6 +129,8 @@ def create_checkout_session(request):
         return JsonResponse({"error": "No items in cart"}, status=400)
 
     line_items = []
+    order_metadata = []
+
     for item in cart_items:
         line_items.append({
             'price_data': {
@@ -135,11 +138,18 @@ def create_checkout_session(request):
                 'product_data': {
                     'name': item.product.name,
                     'description': f"Wood: {item.variant.wood_type}, Size: {item.variant.size}",
-                    #'images': [item.product.main_image.url] if item.product.main_image else [],
                 },
-                'unit_amount': int(item.get_total_price() * 100),  # Convert to cents
+                'unit_amount': int(item.get_total_price() * 100),
             },
             'quantity': item.quantity,
+        })
+
+        order_metadata.append({
+            'product_name': item.product.name,
+            'wood_type': item.variant.wood_type,
+            'size': item.variant.size,
+            'quantity': item.quantity,
+            'price': float(item.get_total_price())
         })
 
     checkout_session = stripe.checkout.Session.create(
@@ -148,7 +158,9 @@ def create_checkout_session(request):
         mode='payment',
         success_url=request.build_absolute_uri('/success/'),
         cancel_url=request.build_absolute_uri('/cancel/'),
+        metadata={
+            'order': json.dumps(order_metadata)
+        }
     )
 
     return JsonResponse({'id': checkout_session.id})
-
