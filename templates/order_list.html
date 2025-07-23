@@ -16,8 +16,7 @@
             <th>Customer</th>
             <th>Email</th>
             <th>Shipping Address</th>
-            <th>Product</th>
-            <th>Wood / Size</th>
+            <th>Products</th>
             <th>Qty</th>
             <th>Total</th>
             <th>Status</th>
@@ -27,14 +26,25 @@
         <tbody>
           {% for order in orders %}
             <tr>
-              <td>{{ order.order_number }}</td>  
+              <td>{{ order.order_number }}</td>
               <td>{{ order.customer_name }}</td>
               <td>{{ order.customer_email }}</td>
               <td style="white-space: pre-line;">{{ order.shipping_address }}</td>
-              <td>{{ order.product_name }}</td>
-              <td>{{ order.wood_type }} / {{ order.size }}</td>
-              <td class="text-center">{{ order.quantity }}</td>
+              
+              <td>
+                {% for item in order.items.all %}
+                  <div>{{ item.product_name }} ({{ item.wood_type }} / {{ item.size }})</div>
+                {% endfor %}
+              </td>
+              
+              <td class="text-center">
+                {% for item in order.items.all %}
+                  <div>{{ item.quantity }}</div>
+                {% endfor %}
+              </td>
+
               <td>${{ order.total_price }}</td>
+              
               <td>
                 <form method="post" action="{% url 'toggle_order_status' order.id %}">
                   {% csrf_token %}
@@ -53,6 +63,7 @@
                   </div>
                 </form>
               </td>
+              
               <td>{{ order.created_at|date:"M d, Y H:i" }}</td>
             </tr>
           {% endfor %}

@@ -5,13 +5,13 @@
 
 {% block content %}
 <!-- templates/products/product_list.html -->
-<h2 class="mb-4">All Products</h2>
+<h3 class="mb-4">The Chicago Collection</h3>
 <div class="row">
   {% for product in products %}
     <div class="col-md-4 mb-4">
       <div class="card h-100">
         <a href="{{ product.get_absolute_url }}">
-          {% if product.main_image %}-
+          {% if product.main_image %}
             <img src="{{ product.main_image.url }}" alt="{{ product.name }}" class="img-fluid">
           {% else %}
             <img src="{% static 'images/placeholder.jpg' %}" alt="No image available" class="img-fluid">
@@ -24,9 +24,11 @@
               {{ product.name }}
             </a>
           </h5>
-          <p class="text-muted">{{ product.product_type|capfirst }}</p>
+          
           {% with product.variants.all|dictsort:"price_modifier"|first as cheapest %}
           <p class="fw-bold">Starting at ${{ cheapest.price_modifier }}</p>
+          <a href="{{ product.get_absolute_url }}" class="btn btn-outline-dark mt-2">Select Options
+          </a>
 {% endwith %}
 
         </div>

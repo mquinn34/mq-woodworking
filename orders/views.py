@@ -7,13 +7,11 @@ from django.views import View
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from cart.models import CartItem, Cart
-from .models import Order
+from .models import Order, OrderItem
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 
-
-# Set Stripe secret key
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
@@ -25,8 +23,6 @@ def create_checkout_session(request):
         request.session.save()
 
     session_key = request.session.session_key
-   
-
     cart_items = CartItem.objects.filter(cart__session_key=session_key)
 
     if not cart_items:
@@ -97,17 +93,27 @@ class StripeWebhookView(View):
             address = customer.get('address', {})
             full_address = f"{address.get('line1', '')}, {address.get('city', '')}, {address.get('state', '')} {address.get('postal_code', '')}"
 
+            # Calculate grand total
+            grand_total = sum(item['price'] for item in order_data)
+
+            # Create main order
+            order = Order.objects.create(
+                customer_name=customer.get('name', ''),
+                customer_email=customer.get('email', ''),
+                shipping_address=full_address,
+                total_price=grand_total,
+                stripe_session_id=session.get('id')
+            )
+
+            # Create order items
             for item in order_data:
-                Order.objects.create(
-                    customer_name=customer.get('name', ''),
-                    customer_email=customer.get('email', ''),
-                    shipping_address=full_address,
+                OrderItem.objects.create(
+                    order=order,
                     product_name=item['product_name'],
                     wood_type=item['wood_type'],
                     size=item['size'],
                     quantity=item['quantity'],
-                    total_price=item['price'],
-                    stripe_session_id=session.get('id')
+                    item_price=item['price']
                 )
 
             # Clear cart
@@ -126,7 +132,6 @@ class OrderListView(LoginRequiredMixin, ListView):
     ordering = ['-created_at']
 
 
-# change order status
 @login_required
 def toggle_order_status(request, pk):
     if request.method == "POST":
