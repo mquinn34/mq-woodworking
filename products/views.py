@@ -73,65 +73,54 @@ class CreateProductView(LoginRequiredMixin, CreateView):
             return self.render_to_response(self.get_context_data(form=form))
 
 
-
 class EditProductView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     template_name = 'edit_products.html'
-    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            formset = ProductVariantFormSet(self.request.POST, instance=self.object)
+            formset = ProductVariantFormSet(self.request.POST, instance=self.object, prefix='form')
         else:
-            formset = ProductVariantFormSet(instance=self.object)
+            formset = ProductVariantFormSet(instance=self.object, prefix='form')
 
         context['formset'] = formset
         context['empty_form'] = formset.empty_form
-        context['existing_images'] = self.object.images.all() 
-
+        context['existing_images'] = self.object.images.all()
         return context
 
     def form_valid(self, form):
-  
-        formset = ProductVariantFormSet(self.request.POST, instance=self.object)
+        formset = ProductVariantFormSet(self.request.POST, instance=self.object, prefix='form')
         images = self.request.FILES.getlist('image')
+
         if form.is_valid() and formset.is_valid():
             self.object = form.save()
-            
 
+            # Delete removed images
             delete_ids = self.request.POST.getlist('delete_image_ids')
             if delete_ids:
                 ProductImage.objects.filter(id__in=delete_ids, product=self.object).delete()
 
+            # Save new images
             for img in images:
                 ProductImage.objects.create(product=self.object, image=img)
 
+            # Save all variant forms
+            formset.save()
 
-            for form in formset:
-                if form.cleaned_data and not form.cleaned_data.get('DELETE', False):
-                    variant = form.save(commit=False)
-                    variant.product = self.object
-                    variant.save()
-
-            
             return redirect('manage_products')
 
-
-            
-
-    # if anything is invalid, fall through and show the form again
         return self.render_to_response(
             self.get_context_data(form=form, formset=formset)
-    )
+        )
+
 
 
 class DeleteProductView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = 'delete_products.html'
     success_url = reverse_lazy('manage_products')
-
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):

@@ -1,11 +1,38 @@
 {% extends "base.html" %}
+{% load static %}
+
 {% block content %}
 <div class="container mt-5">
-  <h2>CONTACT MQ WOODWORKING</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Send Message</button>
-  </form>
+  <div class="row">
+    
+    <!-- Left Side: Text -->
+    <div class="col-md-6 mb-4">
+      <h2>Let’s Build Something Beautiful Together</h2>
+      <p>Whether you’re looking for a custom record cabinet, a handcrafted dining table, or a piece inspired by your favorite Chicago street, I’d love to hear from you.</p>
+      <h2>Reach Out</h2>
+      <p>Email: <a href="mailto:hello@mqwoodworking.com">mqwoodworking@gmail.com</a><br>
+      <p>Phone: 630-890-5002</p>
+      <p>Workshop Location: Lakeview, Chicago, IL</p>
+      <h2>Looking for Inspiration?</h2>
+      <p>Check out our Gallery or browse our pieces like the Ashland and the Diversey in our Collection to see what’s possible.</p>
+
+
+    </div>
+
+    <!-- Right Side: Contact Form -->
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-4">Send a Message</h5>
+          <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 {% endblock %}

@@ -69,7 +69,7 @@ class GalleryImageUploadView(LoginRequiredMixin, View):
         return render(request, self.template_name)
 
     def post(self, request):
-        images = request.FILES.getlist('image')  # Match input name="image"
+        images = request.FILES.getlist('image')  
         for img in images:
             GalleryImage.objects.create(image=img)
         return redirect('gallery-manage')

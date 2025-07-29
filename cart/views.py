@@ -17,7 +17,7 @@ def add_to_cart(request):
         quantity   = int(request.POST.get("quantity", 1))
 
         if not variant_id:
-            return redirect("view_cart")  # don't crash on blank
+            return redirect("view_cart")  
 
         variant = get_object_or_404(ProductVariant, id=variant_id)
 

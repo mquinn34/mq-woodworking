@@ -2,9 +2,9 @@
 from django.contrib import admin
 from .models import Product, ProductVariant
 
-class ProductVariantInline(admin.TabularInline):  # or StackedInline
+class ProductVariantInline(admin.TabularInline): 
     model = ProductVariant
-    extra = 0  # how many empty forms to show
+    extra = 0  
 
 
 

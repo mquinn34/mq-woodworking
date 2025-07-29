@@ -53,12 +53,13 @@
                       <span class="badge bg-success">Completed</span>
                     {% elif order.status == "In Progress" %}
                       <span class="badge bg-primary">In Progress</span>
-                    {% else %}
-                      <span class="badge bg-secondary">Pending</span>
+                   {% elif order.status == "Canceled" %}
+                      <span class="badge bg-secondary">Canceled</span>
                     {% endif %}
                     <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
                       <option value="In Progress" {% if order.status == 'In Progress' %}selected{% endif %}>In Progress</option>
                       <option value="Completed" {% if order.status == 'Completed' %}selected{% endif %}>Completed</option>
+                      <option value="Canceled" {% if order.status == 'Canceled' %}selected{% endif %}>Canceled</option>
                     </select>
                   </div>
                 </form>

@@ -77,13 +77,16 @@
           </div>
 
         {% if user.is_authenticated %}
-          <div class="d-inline-block ms-3">
-            <span class="me-2">Hi {{ user.username }}!</span>
-            <form action="{% url 'logout' %}" method="post" class="d-inline">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-sm btn-outline-light">Log Out</button>
-            </form>
-          </div>
+  <div class="d-inline-block ms-3">
+    <span class="me-2">Hi {{ user.username }}!</span>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-sm btn-outline-light me-2">Dashboard</a>
+
+    <form action="{% url 'logout' %}" method="post" class="d-inline">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-outline-light">Log Out</button>
+    </form>
+  </div>
         {% else %}
           <div class="d-inline-block ms-3">
             <a href="{% url 'login' %}" class="btn btn-sm btn-outline-light">Log In</a>

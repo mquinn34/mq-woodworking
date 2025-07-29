@@ -68,7 +68,7 @@
     });
   });
 
-  // Updates total on quantity change
+
   document.body.addEventListener("cartTotalUpdated", function(event) {
     if (event.detail && event.detail.total) {
       document.getElementById("cart-total").textContent = "$" + parseFloat(event.detail.total).toFixed(2);

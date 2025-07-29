@@ -4,6 +4,7 @@ class Order(models.Model):
     STATUS_CHOICES = [
         ('In Progress', 'In Progress'),
         ('Completed', 'Completed'),
+        ('Canceled', 'Canceled'),
     ]
 
     order_number = models.CharField(max_length=15, unique=True, editable=False, blank=True, null=True)
