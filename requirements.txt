@@ -7,6 +7,7 @@ dj-database-url==3.0.1
 Django==5.2.3
 django-ckeditor==6.7.3
 django-js-asset==3.1.2
+gunicorn==23.0.0
 idna==3.10
 mypy_extensions==1.1.0
 packaging==25.0
