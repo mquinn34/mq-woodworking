@@ -3,6 +3,7 @@ black==25.1.0
 certifi==2025.7.14
 charset-normalizer==3.4.2
 click==8.2.1
+cloudinary==1.44.1
 dj-database-url==3.0.1
 Django==5.2.3
 django-ckeditor==6.7.3
@@ -18,6 +19,7 @@ psycopg==3.2.9
 psycopg2-binary==2.9.10
 python-dotenv==1.1.1
 requests==2.32.4
+six==1.17.0
 sqlparse==0.5.3
 stripe==12.3.0
 typing_extensions==4.14.1
