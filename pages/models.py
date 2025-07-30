@@ -1,7 +1,8 @@
 from django.db import models
+from cloudinary.models import CloudinaryField
 
 class GalleryImage(models.Model):
-    image = models.ImageField(upload_to='gallery/')
+    image = CloudinaryField('image', blank=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
