@@ -47,7 +47,7 @@ A full-stack e-commerce site built with Django and Python for a real custom furn
 You can explore the admin dashboard using:
 
 ```
-Username: Admin  
+Username: admin  
 Password: Test123
 ```
 
