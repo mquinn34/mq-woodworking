@@ -1,6 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from ckeditor.fields import RichTextField
+from cloudinary.models import CloudinaryField
+
 
 
 class Product(models.Model):
@@ -13,7 +15,8 @@ class Product(models.Model):
         ('coffee_table', 'Coffee Table')
     ])
     is_featured = models.BooleanField(default=False)
-    main_image = models.ImageField(upload_to='main_images/', blank = True)
+    main_image = CloudinaryField('image', blank=True)
+
 
     def get_absolute_url(self):
         return reverse('product_detail', kwargs={'slug': self.slug})
@@ -33,7 +36,7 @@ class ProductVariant(models.Model):
     
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name= 'images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='product_images/')
+    image = CloudinaryField('image', blank=True)
     alt_text = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
